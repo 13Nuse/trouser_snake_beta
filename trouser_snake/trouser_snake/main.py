@@ -1,6 +1,7 @@
 #! python3
 import pygame
 
+import views
 
 # Start screen
 

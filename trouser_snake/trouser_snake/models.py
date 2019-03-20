@@ -190,11 +190,17 @@ class PlayerModel:
         rand_pill_y = round(random.randrange(0, VideoSettings.display_height - item_size) / item_size) * item_size
         return rand_pill_x, rand_pill_y
 
+    def power_item():
+        pass
+
     def score(self, score):
         self.score = score
         text = self.small_font.render('Score: ' + str(int(self.score) * 10), True, Colors.black)
         # displays score at top left corner
         self.game_display.blit(text, [0, 0])
+
+    def hi_score(self, score):
+        pass
 
     def model_draw():
         pass
