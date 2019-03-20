@@ -99,9 +99,9 @@ class InGameSettings:
                     if event.key == pygame.K_q:
                         pygame.quit()
                         quit()
-            VideoSettings.game_display.fill(VideoSettings.colors.black)
+            VideoSettings.game_display.fill(Colors.black)
             VideoSettings.message_to_screen("Game Paused",
-                                            VideoSettings.colors.red,
+                                            Colors.red,
                                             y_displace=-50,
                                             size="large")
             VideoSettings.message_to_screen("Press C to continue or Q to quit.",
@@ -192,9 +192,9 @@ class PlayerModel:
 
     def score(self, score):
         self.score = score
-        text = self.small_font.render('Score: ' + str(int(self.score) * 10), True, black)
+        text = self.small_font.render('Score: ' + str(int(self.score) * 10), True, Colors.black)
         # displays score at top left corner
-        game_display.blit(text, [0, 0])
+        self.game_display.blit(text, [0, 0])
 
     def model_draw():
         pass
@@ -204,7 +204,7 @@ class EnemyModel(PlayerModel):
     def __init__(self, size):
         self.size = self.item_size
 
-    rand_pill_x, rand_pill_y = charactor_item()
+    rand_pill_x, rand_pill_y = PlayerModel.charactor_item()
 
 
 class GameStart:
