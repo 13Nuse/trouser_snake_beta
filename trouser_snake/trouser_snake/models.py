@@ -10,15 +10,20 @@ class Settings:
         self.FPS = FPS
         self.paused = paused
 
-    clock = pygame.time.Clock()
-    FPS = 15
-    paused = True
+    @classmethod
+    def clock(self):
+        self.clock = pygame.time.Clock()
+
+    def FPS(self):
+        self.FPS = 15
+
+    def paused(self):
+        return True
+
     # def easy_game(self):
     # self.easy = item_size * 3
-
     # medium = item_size * 2
     # hard = item_size
-    # hi-score
 
 
 class Colors:
@@ -101,26 +106,6 @@ class PlayerModel:
         left = 90
         down = 180
         right = 270
-
-    @classmethod
-    def charactor_sprite(self, block_size, hero_body):
-        if PlayerModel.charactor_move.direction == 'right':
-            head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.right)
-
-        if PlayerModel.charactor_move.direction == 'left':
-            head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.left)
-
-        if PlayerModel.charactor_move.direction == 'up':
-            head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.up)
-
-        if PlayerModel.charactor_move.direction == 'down':
-            head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.down)
-
-        VideoSettings.game_display.blit(head, (hero_body[-1][0], hero_body[-1][1]))
-
-        for XnY_axis in hero_body[:-1]:
-            # draws snake (where, color, and position[x,y,width,height])
-            pygame.draw.rect(VideoSettings.game_display, Colors.brown, [XnY_axis[0], XnY_axis[1], block_size, block_size])
 
     def charactor_growth(self):
         self.hero_head = []
