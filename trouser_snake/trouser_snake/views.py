@@ -4,13 +4,19 @@ import pygame
 from models import Settings
 from models import VideoSettings
 from models import PlayerModel
+from models import GameStart
 from models import Colors
 from models import ImageData
+from models import GameOver
+
+
+def background_color():
+    VideoSettings.game_display.fill(Colors.white)
+    return
 
 
 def game_intro():
-    intro = True
-
+    intro = GameStart()
     while intro:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -71,7 +77,8 @@ def pause():
         Settings.clock.tick(5)
 
 
-def charactor_move(self):
+def charactor_move(self, PlayerModel):
+    # assigning what each key press does for player model.
     if pygame.event.type == pygame.KEYDOWN:
         if pygame.event.key == pygame.K_LEFT:
             PlayerModel.direction = "left"
@@ -99,16 +106,17 @@ def charactor_move(self):
 
 
 def charactor_sprite(self, block_size, hero_body):
-    if PlayerModel.charactor_move.direction == 'right':
+    # Once key is pressed, player image will update with appropriate direction.
+    if PlayerModel.direction == 'right':
         head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.right)
 
-    if PlayerModel.charactor_move.direction == 'left':
+    if PlayerModel.direction == 'left':
         head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.left)
 
-    if PlayerModel.charactor_move.direction == 'up':
+    if PlayerModel.direction == 'up':
         head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.up)
 
-    if PlayerModel.charactor_move.direction == 'down':
+    if PlayerModel.direction == 'down':
         head = pygame.transform.rotate(ImageData.hero_img, PlayerModel.down)
 
     VideoSettings.game_display.blit(head, (hero_body[-1][0], hero_body[-1][1]))
@@ -116,3 +124,51 @@ def charactor_sprite(self, block_size, hero_body):
     for XnY_axis in hero_body[:-1]:
         # draws snake (where, color, and position[x,y,width,height])
         pygame.draw.rect(VideoSettings.game_display, Colors.brown, [XnY_axis[0], XnY_axis[1], block_size, block_size])
+
+
+def Collision(PlayerModel):
+    # Checks if player crashed into self.
+    for each in PlayerModel.hero_body[:-1]:
+        if each == PlayerModel.hero_head:
+            GameOver.game_over = True
+
+    charactor_sprite(PlayerModel.block_size, PlayerModel.hero_body)
+
+    PlayerModel.score(PlayerModel.body_length - PlayerModel.growth)
+
+    pygame.display.update()
+
+
+def game_over(GameOver):
+    # Game over screen, asking player what they want to do.
+    VideoSettings.game_display.fill(Colors.black)
+    VideoSettings.message_to_screen("Game Over",
+                                    Colors.red,
+                                    y_displace=-50,
+                                    size="medium")
+
+    VideoSettings.message_to_screen("press C to play again or Q to quit.", Colors.red)
+    pygame.display.update()
+
+
+def user_gameover():
+    #  Checks if player crashed into outer walls.
+    if PlayerModel.lead_x >= VideoSettings.display_width or PlayerModel.lead_x < 0 or PlayerModel.lead_y >= VideoSettings.display_height or PlayerModel.lead_y < 0:
+        GameOver.game_over = True
+        PlayerModel.direction = 'right'
+        game_over()
+
+    PlayerModel.lead_x += PlayerModel.lead_x_change
+    PlayerModel.lead_y += PlayerModel.lead_y_change
+    pygame.display.update()
+
+
+def score(self, score):
+    self.score = score
+    text = self.small_font.render('Score: ' + str(int(self.score) * 10), True, Colors.black)
+    # displays score at top left corner
+    self.game_display.blit(text, [0, 0])
+
+
+def hi_score(self, score):
+    pass
