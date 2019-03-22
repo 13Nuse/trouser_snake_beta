@@ -2,6 +2,7 @@
 
 import pygame
 import random
+import os
 
 
 class Settings:
@@ -10,7 +11,6 @@ class Settings:
         self.FPS = FPS
         self.paused = paused
 
-    @classmethod
     def clock(self):
         self.clock = pygame.time.Clock()
 
@@ -35,12 +35,15 @@ class Colors:
 
 
 class ImageData:
-    favicon_img = pygame.image.load('taco.png')
-    bgGame_img = pygame.image.load('bggame.jpeg')
-    hero_img = pygame.image.load('snakehead.png')
-    pill_img = pygame.image.load('speed.png')
-    item_img = pygame.image.load('pill.png')
-    taco_img = pygame.image.load('taco.png')
+    def __init__(self, images):
+        self.images = images
+
+    favicon_img = pygame.image.load(os.path.join('data', 'taco.png'))
+    bgGame_img = pygame.image.load(os.path.join('data', 'bggame.jpeg'))
+    hero_img = pygame.image.load(os.path.join('data', 'snakehead.png'))
+    pill_img = pygame.image.load(os.path.join('data', 'speed.png'))
+    item_img = pygame.image.load(os.path.join('data', 'pill.png'))
+    taco_img = pygame.image.load(os.path.join('data', 'taco.png'))
 
 
 class VideoSettings:
@@ -75,17 +78,14 @@ class VideoSettings:
         text_rect.center = (self.display_width / 2), (self.display_height / 2) + y_displace  # centers msg then moves it to y pos.
         self.game_display.blit(text_surf, text_rect)
 
+    def game_display(self, game_display):
+        self.game_display = pygame.display()
+
     def video_resolution(self):
         self.display_width = 800
         self.display_height = 600
-        self.display_res = (self.display_width, self.display_height)
+        self.display_res = self.game_display.set_mode(self.display_width, self.display_height)
         print(self.display_res)
-
-    def game_display(self):
-        self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
-        pygame.display.set_icon(ImageData.favicon_img)
-        pygame.display.set_caption('Trouser Snake')
-        return
 
 
 class PlayerModel:
@@ -133,9 +133,8 @@ class PlayerModel:
 
 class EnemyModel(PlayerModel):
     def __init__(self, size):
-        self.size = self.item_size
-
-    rand_pill_x, rand_pill_y = PlayerModel.charactor_item()
+        self.size = size
+        PlayerModel.charactor_item(self.size)
 
 
 class GameStart:
@@ -148,8 +147,8 @@ class GameStart:
 
 class GameOver:
     def __init__(self, game_exit, game_over):
-        self.game_exit = False
-        self.game_over = False
+        self.game_exit = game_exit
+        self.game_over = game_over
 
     def game_exit(self):
         return False

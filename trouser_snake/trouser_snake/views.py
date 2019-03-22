@@ -16,7 +16,8 @@ def background_color():
 
 
 def game_intro():
-    intro = GameStart()
+    pygame.init()
+    intro = GameStart.intro
     while intro:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -50,7 +51,7 @@ def game_intro():
 
 
 def pause():
-    paused = True
+    paused = Settings.paused()
 
     while paused:
         for event in pygame.event.get():
@@ -139,7 +140,11 @@ def Collision(PlayerModel):
     pygame.display.update()
 
 
-def game_over(GameOver):
+def pill():
+    pass
+
+
+def game_over_screen(GameOver):
     # Game over screen, asking player what they want to do.
     VideoSettings.game_display.fill(Colors.black)
     VideoSettings.message_to_screen("Game Over",
@@ -156,7 +161,7 @@ def user_gameover():
     if PlayerModel.lead_x >= VideoSettings.display_width or PlayerModel.lead_x < 0 or PlayerModel.lead_y >= VideoSettings.display_height or PlayerModel.lead_y < 0:
         GameOver.game_over = True
         PlayerModel.direction = 'right'
-        game_over()
+        game_over_screen()
 
     PlayerModel.lead_x += PlayerModel.lead_x_change
     PlayerModel.lead_y += PlayerModel.lead_y_change
@@ -175,7 +180,7 @@ def hi_score(self, score):
 
 
 def game_loop():
-    game_exit, game_over = GameOver()
+    game_exit, game_over = (GameOver.game_exit, GameOver.game_over)
     game_intro()
     while not game_exit:
         while game_over is True:
@@ -202,25 +207,26 @@ def game_loop():
         # background color(color, rect[x,y,width,height])
         background_color()
 
+        # score for game.
+        score(PlayerModel.body_length - PlayerModel.growth)
+
         pill_thickness = item_size
 
         game_display.blit(taco_img, (rand_pill_x, rand_pill_y))  # taco def goes here
 
         # adds length of snake after pill is eaten
-        p.charactor_growth()
+        charactor_growth()
 
         # checks collision of snake head
-        for each in hero_body[:-1]:
-            if each == hero_head:
-                game_over = True
+        collision()
 
-        charactor_sprite(block_size, hero_body)
+        charactor_sprite(PlayerModel.block_size, PlayerModel.hero_body)
 
-        score(body_length - growth)
+        score(PlayerModel.body_length - PlayerModel.growth)
 
         pygame.display.update()
 
-        # when you eat a pill another on shows at a random spot
+        # when you eat a pill another one shows at a random spot
         if lead_x >= rand_pill_x and lead_x <= rand_pill_x + pill_thickness:
             if lead_y >= rand_pill_y and lead_y <= rand_pill_y + pill_thickness:
                 rand_pill_x, rand_pill_y = charactor_item()
@@ -234,3 +240,7 @@ def game_loop():
 
     pygame.quit()
     quit()
+
+
+# pygame.display.set_icon(ImageData.favicon_img)
+# pygame.display.set_caption('Trouser Snake'

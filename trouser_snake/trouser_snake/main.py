@@ -1,5 +1,5 @@
 #! python3
-
+import pygame
 from views import game_loop
 
 # game loop
