@@ -27,6 +27,9 @@ class Settings:
 
 
 class Colors:
+    def __init__(self, color):
+        self.color = color
+
     white = (255, 255, 255)
     black = (0, 0, 0)
     red = (255, 0, 0)
@@ -47,10 +50,12 @@ class ImageData:
 
 
 class VideoSettings:
-    def __init__(self, small, medium, large):
+    def __init__(self, small, medium, large, display_width, display_height):
         self.small_font = small
         self.medium_font = medium
         self.large_font = large
+        self.display_width = display_width
+        self.display_height = display_height
 
     def small_font(self):
         self.small_font = pygame.font.SysFont('georgia', 25)
@@ -78,14 +83,13 @@ class VideoSettings:
         text_rect.center = (self.display_width / 2), (self.display_height / 2) + y_displace  # centers msg then moves it to y pos.
         self.game_display.blit(text_surf, text_rect)
 
-    def game_display(self, game_display):
-        self.game_display = pygame.display()
-
-    def video_resolution(self):
+    def video_resolution(self, display_width, display_height):
         self.display_width = 800
         self.display_height = 600
-        self.display_res = self.game_display.set_mode(self.display_width, self.display_height)
-        print(self.display_res)
+
+    def game_display(self):
+        self.game_display = pygame.display.set_mode(self.display_width, self.display_height)
+        return
 
 
 class PlayerModel:

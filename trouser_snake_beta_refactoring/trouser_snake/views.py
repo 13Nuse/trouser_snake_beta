@@ -15,8 +15,14 @@ def background_color():
     return
 
 
-def game_intro():
+def game_display():
+    game_display = pygame.display.set_mode(VideoSettings.display_width, VideoSettings.display_height)
+    return game_display
+
+
+def game_intro(game_display):
     pygame.init()
+    game_display()
     intro = GameStart.intro
     while intro:
         for event in pygame.event.get():
