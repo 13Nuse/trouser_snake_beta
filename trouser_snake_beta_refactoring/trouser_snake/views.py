@@ -10,19 +10,15 @@ from models import ImageData
 from models import GameOver
 
 
-def background_color():
+def background_color(self):
     VideoSettings.game_display.fill(Colors.white)
     return
 
 
-def game_display():
-    game_display = pygame.display.set_mode(VideoSettings.display_width, VideoSettings.display_height)
-    return game_display
-
-
-def game_intro(game_display):
+def game_intro(self, game_display):
+    self.game_display = game_display()
     pygame.init()
-    game_display()
+
     intro = GameStart.intro
     while intro:
         for event in pygame.event.get():
@@ -54,6 +50,10 @@ def game_intro(game_display):
 
         pygame.display.update()
         Settings.clock.tick(Settings.FPS)
+
+    def game_display(self):
+        game_display = pygame.display.set_mode(VideoSettings.display_width, VideoSettings.display_height)
+        return game_display
 
 
 def pause():
